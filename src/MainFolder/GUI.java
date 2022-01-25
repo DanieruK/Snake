@@ -18,7 +18,7 @@ public class GUI extends JFrame implements KeyListener {
     private ArrayList<Point> snakePos = new ArrayList<>();
     private Control c;
     private Timer t;
-    private int delay = 250;
+    private int delay = 500;
 
     private boolean right = true;
     private boolean left = false;
@@ -40,6 +40,7 @@ public class GUI extends JFrame implements KeyListener {
 
         JPanel mainPan = new JPanel();
         mainPan.setLayout(new GridLayout(width, height));
+        mainPan.setBackground(Color.BLACK);
         con.add(mainPan, BorderLayout.CENTER);
 
         grid = new JPanel[width][height];
@@ -53,38 +54,18 @@ public class GUI extends JFrame implements KeyListener {
 
         ActionListener taskManager = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (right){
-                    c.moveSnake(new Point(snakePos.get(0).x,snakePos.get(0).y+1));
-                    setSnakePos();
-                    clearGridInfo();
-                    updateGridInfoApple();
-                    updateGridInfoSnake();
-                    colorize();
-                    repaint();
-                }else if(up){
-                    c.moveSnake(new Point(snakePos.get(0).x-1,snakePos.get(0).y));
-                    setSnakePos();
-                    clearGridInfo();
-                    updateGridInfoApple();
-                    updateGridInfoSnake();
-                    colorize();
-                    repaint();
-                }else if (down){
-                    c.moveSnake(new Point(snakePos.get(0).x+1,snakePos.get(0).y));
-                    setSnakePos();
-                    clearGridInfo();
-                    updateGridInfoApple();
-                    updateGridInfoSnake();
-                    colorize();
-                    repaint();
-                }else if (left){
-                    c.moveSnake(new Point(snakePos.get(0).x,snakePos.get(0).y-1));
-                    setSnakePos();
-                    clearGridInfo();
-                    updateGridInfoApple();
-                    updateGridInfoSnake();
-                    colorize();
-                    repaint();
+                if (right) {
+                    c.moveSnake(new Point(snakePos.get(0).x, snakePos.get(0).y + 1));
+                    eventRoutine();
+                } else if (up) {
+                    c.moveSnake(new Point(snakePos.get(0).x - 1, snakePos.get(0).y));
+                    eventRoutine();
+                } else if (down) {
+                    c.moveSnake(new Point(snakePos.get(0).x + 1, snakePos.get(0).y));
+                    eventRoutine();
+                } else if (left) {
+                    c.moveSnake(new Point(snakePos.get(0).x, snakePos.get(0).y - 1));
+                    eventRoutine();
                 }
             }
 
@@ -99,10 +80,6 @@ public class GUI extends JFrame implements KeyListener {
         t.start();
         setLocationRelativeTo(null);
         setVisible(true);
-    }
-
-    public void setApplePos(Point applePos) {
-        this.applePos = applePos;
     }
 
     public void setSnakePos() {
@@ -146,7 +123,11 @@ public class GUI extends JFrame implements KeyListener {
         }
     }
 
-    public void clearGridInfo(){
+    public void setApplePos(Point applePos) {
+        this.applePos = applePos;
+    }
+
+    public void clearGridInfo() {
         for (int i = 0; i < gridInfo.length; i++) {
             for (int j = 0; j < gridInfo[i].length; j++) {
                 gridInfo[i][j] = 0;
@@ -164,37 +145,61 @@ public class GUI extends JFrame implements KeyListener {
         }
     }
 
-    public void keyTyped(KeyEvent e) {
-
+    public void checkCollision() {
+        if (snakePos.get(0).x == -1 || snakePos.get(0).y == -1 || snakePos.get(0).x == grid.length || snakePos.get(0).y == grid[0].length) {
+            t.stop();
+            System.out.println("Collision Detectet");
+        }
+        for (int i = snakePos.size() - 1; i >= 1; i--) {
+            if (snakePos.get(0) == snakePos.get(i)) {
+                t.stop();
+                System.out.println("Collision with Body");
+                break;
+            }
+        }
     }
 
-    @Override
+    public void checkAppleEaten() {
+        if (snakePos.get(0) == applePos){
+            //TODO
+        }
+    }
+
+    public void eventRoutine() {
+        setSnakePos();
+        checkCollision();
+        clearGridInfo();
+        updateGridInfoApple();
+        updateGridInfoSnake();
+        colorize();
+        repaint();
+    }
+
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_W && !down) {
             left = false;
             right = false;
             up = true;
-            System.out.println("W");
         } else if (e.getKeyCode() == KeyEvent.VK_S && !up) {
             left = false;
             right = false;
             down = true;
-            System.out.println("S");
         } else if (e.getKeyCode() == KeyEvent.VK_A && !right) {
             up = false;
             down = false;
             left = true;
-            System.out.println("A");
         } else if (e.getKeyCode() == KeyEvent.VK_D && !left) {
             up = false;
             down = false;
             right = true;
-            System.out.println("D");
         }
     }
 
-    @Override
     public void keyReleased(KeyEvent e) {
+
+    }
+
+    public void keyTyped(KeyEvent e) {
 
     }
 
