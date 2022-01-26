@@ -18,7 +18,7 @@ public class GUI extends JFrame implements KeyListener {
     private ArrayList<Point> snakePos = new ArrayList<>();
     private Control c;
     private Timer t;
-    private int delay = 500;
+    private int delay = 150;
 
     private boolean right = true;
     private boolean left = false;
@@ -151,7 +151,7 @@ public class GUI extends JFrame implements KeyListener {
             System.out.println("Collision Detectet");
         }
         for (int i = snakePos.size() - 1; i >= 1; i--) {
-            if (snakePos.get(0) == snakePos.get(i)) {
+            if (snakePos.get(0).x == snakePos.get(i).x && snakePos.get(0).y == snakePos.get(i).y) {
                 t.stop();
                 System.out.println("Collision with Body");
                 break;
@@ -160,7 +160,7 @@ public class GUI extends JFrame implements KeyListener {
     }
 
     public void checkAppleEaten() {
-        if (snakePos.get(0) == applePos){
+        if (snakePos.get(0) == applePos) {
             //TODO
         }
     }

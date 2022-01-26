@@ -8,17 +8,17 @@ public class Apple {
     private int width;
     private int height;
 
-    public Apple(int pWidth, int pHeight){
+    public Apple(int pWidth, int pHeight) {
         width = pWidth;
         height = pHeight;
         position = randPos();
     }
 
-    public Point randPos(){
-        return new Point(((int)(Math.random()*width)), ((int)(Math.random()*height)));
+    public Point randPos() {
+        return new Point(((int) (Math.random() * width)), ((int) (Math.random() * height)));
     }
 
-    public void recyclePos(){
+    public void recyclePos() {
         position = randPos();
     }
 
