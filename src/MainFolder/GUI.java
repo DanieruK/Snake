@@ -12,8 +12,7 @@ public class GUI extends JFrame implements KeyListener {
 
     private int width;
     private int height;
-    private JPanel[][] grid;
-    private int[][] gridInfo;
+    private GridPanel[][] grid;
     private Point applePos;
     private ArrayList<Point> snakePos = new ArrayList<>();
     private Control c;
@@ -43,10 +42,10 @@ public class GUI extends JFrame implements KeyListener {
         mainPan.setBackground(Color.BLACK);
         con.add(mainPan, BorderLayout.CENTER);
 
-        grid = new JPanel[width][height];
+        grid = new GridPanel[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                grid[i][j] = new JPanel();
+                grid[i][j] = new GridPanel();
                 grid[i][j].setBackground(Color.gray);
                 mainPan.add(grid[i][j]);
             }
@@ -72,7 +71,6 @@ public class GUI extends JFrame implements KeyListener {
         };
 
         addKeyListener(this);
-        initGridinfo(width, height);
         updateGridInfoSnake();
         updateGridInfoApple();
         colorize();
@@ -87,36 +85,30 @@ public class GUI extends JFrame implements KeyListener {
     }
 
     public void colorize() {
-        for (int i = 0; i < gridInfo.length; i++) {
-            for (int j = 0; j < gridInfo[i].length; j++) {
-                if (gridInfo[i][j] == 0) {
-                    grid[i][j].setBackground(Color.BLACK);
-                } else if (gridInfo[i][j] == 1) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j].isSnakeOnPanel() && !grid[i][j].isAppleOnPanel() && !grid[i][j].isSnakeDead()) {
                     grid[i][j].setBackground(Color.GREEN);
-                } else if (gridInfo[i][j] == 2) {
-                    grid[i][j].setBackground(Color.red);
+                } else if (!grid[i][j].isSnakeOnPanel() && grid[i][j].isAppleOnPanel() && !grid[i][j].isSnakeDead()) {
+                    grid[i][j].setBackground(Color.RED);
+                } else if (grid[i][j].isSnakeOnPanel() && grid[i][j].isAppleOnPanel() && !grid[i][j].isSnakeDead()) {
+                    grid[i][j].setBackground(Color.GREEN);
+                }else if (!grid[i][j].isSnakeOnPanel() && !grid[i][j].isAppleOnPanel() && !grid[i][j].isSnakeDead()){
+                    grid[i][j].setBackground(Color.BLACK);
+                }else if(grid[i][j].isSnakeDead()){
+                    grid[i][j].setBackground(Color.RED);
                 }
             }
         }
     }
 
-    public void initGridinfo(int pWidth, int pHeight) {
-        gridInfo = new int[pWidth][pHeight];
-        for (int i = 0; i < gridInfo.length; i++) {
-            for (int j = 0; j < gridInfo[i].length; j++) {
-                gridInfo[i][j] = 0;
-            }
-        }
-    }
-
     public void updateGridInfoSnake() {
-        setApplePos(c.getPointApple());
         setSnakePos();
         for (int i = 0; i < snakePos.size(); i++) {
-            for (int j = 0; j < gridInfo.length; j++) {
-                for (int k = 0; k < gridInfo[j].length; k++) {
+            for (int j = 0; j < grid.length; j++) {
+                for (int k = 0; k < grid[j].length; k++) {
                     if (snakePos.get(i).getX() == j && snakePos.get(i).getY() == k) {
-                        gridInfo[j][k] = 2;
+                        grid[j][k].setSnakeOnPanel(true);
                     }
                 }
             }
@@ -128,18 +120,20 @@ public class GUI extends JFrame implements KeyListener {
     }
 
     public void clearGridInfo() {
-        for (int i = 0; i < gridInfo.length; i++) {
-            for (int j = 0; j < gridInfo[i].length; j++) {
-                gridInfo[i][j] = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                grid[i][j].setSnakeOnPanel(false);
+                grid[i][j].setAppleOnPanel(false);
             }
         }
     }
 
     public void updateGridInfoApple() {
+        setApplePos(c.getPointApple());
         for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < gridInfo[i].length; j++) {
+            for (int j = 0; j < grid[i].length; j++) {
                 if (i == applePos.x && j == applePos.y) {
-                    gridInfo[i][j] = 1;
+                    grid[i][j].setAppleOnPanel(true);
                 }
             }
         }
@@ -148,31 +142,46 @@ public class GUI extends JFrame implements KeyListener {
     public void checkCollision() {
         if (snakePos.get(0).x == -1 || snakePos.get(0).y == -1 || snakePos.get(0).x == grid.length || snakePos.get(0).y == grid[0].length) {
             t.stop();
+            machItTot();
             System.out.println("Collision Detectet");
-        }
-        for (int i = snakePos.size() - 1; i >= 1; i--) {
-            if (snakePos.get(0).x == snakePos.get(i).x && snakePos.get(0).y == snakePos.get(i).y) {
-                t.stop();
-                System.out.println("Collision with Body");
-                break;
+        }else {
+            for (int i = snakePos.size() - 1; i >= 1; i--) {
+                if (snakePos.get(0).x == snakePos.get(i).x && snakePos.get(0).y == snakePos.get(i).y) {
+                    t.stop();
+                    machItTot();
+                    System.out.println("Collision with Body");
+                    break;
+                }
             }
         }
     }
 
     public void checkAppleEaten() {
-        if (snakePos.get(0) == applePos) {
-            //TODO
+        if (snakePos.get(0).x == applePos.x && snakePos.get(0).y == applePos.y) {
+            c.addSnakeBodyPart(applePos);
+            appleNewPos();
         }
     }
 
     public void eventRoutine() {
         setSnakePos();
         checkCollision();
+        checkAppleEaten();
         clearGridInfo();
         updateGridInfoApple();
         updateGridInfoSnake();
         colorize();
         repaint();
+    }
+
+    public void machItTot(){
+        for (int i = snakePos.size() - 1; i > 0 ; i--) {
+            grid[snakePos.get(i).x][snakePos.get(i).y].setSnakeDead(true);
+        }
+    }
+
+    public void appleNewPos() {
+        c.appleNewRandPos();
     }
 
     public void keyPressed(KeyEvent e) {

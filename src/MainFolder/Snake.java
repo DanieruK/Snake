@@ -29,7 +29,7 @@ public class Snake {
     }
 
     public void addBodyPoint(Point pPoint) {
-        position.add(pPoint);
+        position.add(1,pPoint);
     }
 
     public ArrayList<Point> getPosition() {

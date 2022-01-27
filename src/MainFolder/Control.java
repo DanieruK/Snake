@@ -30,4 +30,8 @@ public class Control {
         s.addBodyPoint(pPoint);
     }
 
+    public void appleNewRandPos() {
+        a.recyclePos();
+    }
+
 }
