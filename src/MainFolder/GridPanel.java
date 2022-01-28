@@ -7,6 +7,7 @@ public class GridPanel extends JPanel {
     private boolean snakeOnPanel = false;
     private boolean appleOnPanel = false;
     private boolean snakeDead = false;
+    private boolean blockOnPanel = false;
 
     public GridPanel(){
 
@@ -24,6 +25,10 @@ public class GridPanel extends JPanel {
         this.snakeDead = snakeDead;
     }
 
+    public void setBlockOnPanel(boolean blockOnPanel) {
+        this.blockOnPanel = blockOnPanel;
+    }
+
     public boolean isSnakeOnPanel() {
         return snakeOnPanel;
     }
@@ -34,5 +39,9 @@ public class GridPanel extends JPanel {
 
     public boolean isSnakeDead() {
         return snakeDead;
+    }
+
+    public boolean isBlockOnPanel() {
+        return blockOnPanel;
     }
 }
