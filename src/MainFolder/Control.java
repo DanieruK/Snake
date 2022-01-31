@@ -11,7 +11,8 @@ public class Control {
     private Apple a = new Apple(width, height);
 
     public Control() {
-        GUI gui = new GUI(width, height, this);
+        GuiMenu guiMenu = new GuiMenu();
+        //GUI gui = new GUI(width, height, this);
     }
 
     public Point getPointApple() {
@@ -33,5 +34,7 @@ public class Control {
     public void appleNewRandPos() {
         a.recyclePos();
     }
+
+
 
 }

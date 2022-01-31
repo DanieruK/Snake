@@ -9,7 +9,7 @@ public class GridPanel extends JPanel {
     private boolean snakeDead = false;
     private boolean blockOnPanel = false;
 
-    public GridPanel(){
+    public GridPanel() {
 
     }
 

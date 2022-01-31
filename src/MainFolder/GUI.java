@@ -95,27 +95,27 @@ public class GUI extends JFrame implements KeyListener {
                     grid[i][j].setBackground(Color.RED);
                 } else if (grid[i][j].isSnakeOnPanel() && grid[i][j].isAppleOnPanel() && !grid[i][j].isSnakeDead() && !grid[i][j].isBlockOnPanel()) {
                     grid[i][j].setBackground(Color.GREEN);
-                }else if (!grid[i][j].isSnakeOnPanel() && !grid[i][j].isAppleOnPanel() && !grid[i][j].isSnakeDead() && !grid[i][j].isBlockOnPanel()){
+                } else if (!grid[i][j].isSnakeOnPanel() && !grid[i][j].isAppleOnPanel() && !grid[i][j].isSnakeDead() && !grid[i][j].isBlockOnPanel()) {
                     grid[i][j].setBackground(Color.BLACK);
-                }else if (!grid[i][j].isSnakeOnPanel() && grid[i][j].isBlockOnPanel()){
+                } else if (!grid[i][j].isSnakeOnPanel() && grid[i][j].isBlockOnPanel()) {
                     grid[i][j].setBackground(Color.GRAY);
-                }else if(grid[i][j].isSnakeDead()){
+                } else if (grid[i][j].isSnakeDead()) {
                     grid[i][j].setBackground(Color.RED);
                 }
             }
         }
     }
 
-    public void initBlock(){
+    public void initBlock() {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                if (i == 0 || j == 0 || i == grid.length - 1 || j == grid[i].length - 1){
+                if (i == 0 || j == 0 || i == grid.length - 1 || j == grid[i].length - 1) {
                     grid[i][j].setBlockOnPanel(true);
                 }
             }
         }
         for (int i = 0; i < 30; i++) {
-            grid[((int)(Math.random()*width))][((int)(Math.random()*height))].setBlockOnPanel(true);
+            grid[((int) (Math.random() * width))][((int) (Math.random() * height))].setBlockOnPanel(true);
         }
     }
 
@@ -159,7 +159,7 @@ public class GUI extends JFrame implements KeyListener {
     public void checkCollision() {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j].isSnakeOnPanel() && grid[i][j].isBlockOnPanel()){
+                if (grid[i][j].isSnakeOnPanel() && grid[i][j].isBlockOnPanel()) {
                     t.stop();
                     machItTot();
                     System.out.println("Collision with Block");
@@ -183,17 +183,17 @@ public class GUI extends JFrame implements KeyListener {
             appleNewPos();
             placeAppleAgain();
             t.stop();
-            delay = (int)(delay*0.98);
+            delay = (int) (delay * 0.98);
             t.setDelay(delay);
             t.start();
         }
     }
 
-    public void placeAppleAgain(){
+    public void placeAppleAgain() {
         setApplePos(c.getPointApple());
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j].isBlockOnPanel() && applePos.x == i && applePos.y == j){
+                if (grid[i][j].isBlockOnPanel() && applePos.x == i && applePos.y == j) {
                     appleNewPos();
                     placeAppleAgain();
                 }
@@ -212,8 +212,8 @@ public class GUI extends JFrame implements KeyListener {
         revalidate();
     }
 
-    public void machItTot(){
-        for (int i = snakePos.size() - 1; i > 0 ; i--) {
+    public void machItTot() {
+        for (int i = snakePos.size() - 1; i > 0; i--) {
             grid[snakePos.get(i).x][snakePos.get(i).y].setSnakeDead(true);
         }
     }
