@@ -3,37 +3,37 @@ package MainFolder;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Snake {
+public class Snake extends GameObject{
 
-    private ArrayList<Point> position = new ArrayList<>();
+    private Direction direction;
+    private ArrayList<Point> positionList;
 
-    public Snake(int pWidth, int pHeight) {
-        init(pWidth, pHeight);
+    public Snake(int gridWith, int gridHeight) {
+        super(gridWith, gridHeight);
+        direction = Direction.LEFT;
+        positionList.add(this.position);
     }
 
-    public void init(int width, int height) {
-        int startX = (int) (width / 2);
-        int startY = (int) (height / 2);
-
-        position.add(new Point(startX, startY));
-        position.add(new Point(startX, startY - 1));
-        position.add(new Point(startX, startY - 2));
-
-    }
-
-    public void move(Point pPosition) {
-        for (int i = position.size() - 1; i >= 1; i--) {
-            position.set(i, position.get(i - 1));
+    public void setDirection(Direction direction) {
+        if (direction.equals(Direction.UP) && !this.direction.equals(Direction.DOWN)){
+            this.direction = Direction.UP;
+        }else if (direction.equals(Direction.DOWN) && !this.direction.equals(Direction.UP)){
+            this.direction = Direction.DOWN;
+        }else if(direction.equals(Direction.LEFT) && !this.direction.equals(Direction.RIGHT)){
+            this.direction = Direction.LEFT;
+        }else if(direction.equals(Direction.RIGHT) && !this.direction.equals(Direction.LEFT)){
+            this.direction = Direction.RIGHT;
         }
-        position.set(0, pPosition);
     }
 
-    public void addBodyPoint(Point pPoint) {
-        position.add(1, pPoint);
+    public Direction getDirection() {
+        return direction;
     }
 
-    public ArrayList<Point> getPosition() {
-        return position;
+
+
+    enum Direction{
+        UP, DOWN, LEFT, RIGHT
     }
 
 }

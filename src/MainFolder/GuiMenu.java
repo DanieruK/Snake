@@ -10,11 +10,14 @@ public class GuiMenu extends JFrame{
     private final Font textFont = new Font("comic sans", Font.PLAIN, 18);
     private final JTextField userNameInput;
     private final JButton startButton = new JButton("Start");
+    private final JButton dbButton = new JButton("Bestenlisten");
     private final String[] modi = {"Easy", "Medium", " Hard"};
     private JComboBox<String> modusDropDown;
+    private Control control;
 
-    public GuiMenu() {
+    public GuiMenu(Control control) {
         super("Snake Game Menu");
+        this.control = control;
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(new Dimension(400, 500));
         setLocationRelativeTo(null);
@@ -67,11 +70,32 @@ public class GuiMenu extends JFrame{
             }
         });
 
+        dbButton.setBackground(Color.GRAY);
+        dbButton.setForeground(Color.BLACK);
+        dbButton.setBounds(85,360,200,30);
+        dbButton.setFont(textFont);
+        con.add(dbButton);
+        dbButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Keine Datenbank vorhanden");
+            }
+        });
+
         setVisible(true);
     }
 
+    public void closeGUI(){
+        dispose();
+    }
+
+    public int getModi(){
+        return modusDropDown.getSelectedIndex();
+    }
 
     private void startButtonActionPerformed(ActionEvent e){
-
+        control.startGame();
     }
+
+
 }
