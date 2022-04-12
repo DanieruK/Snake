@@ -26,10 +26,19 @@ public class Control {
     }
 
     public void initTimer(){
-        switch (menu.getModi()){
-            case 0: delay = 300; delayMultiplyer = 0.99;
-            case 1: delay = 275; delayMultiplyer = 0.98;
-            case 2: delay = 250; delayMultiplyer = 0.95;
+        switch (menu.getModi()) {
+            case 0 -> {
+                delay = 300;
+                delayMultiplyer = 0.99;
+            }
+            case 1 -> {
+                delay = 275;
+                delayMultiplyer = 0.98;
+            }
+            case 2 -> {
+                delay = 250;
+                delayMultiplyer = 0.95;
+            }
         }
         ActionListener taskManager = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -41,6 +50,7 @@ public class Control {
 
     public void startGame() {
         initTimer();
+        System.out.println(delay + " " + delayMultiplyer);
         menu.closeGUI();
         gui = new GUI(this);
         apple = new Apple(gridWidth, gridHeight);

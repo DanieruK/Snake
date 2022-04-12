@@ -90,6 +90,7 @@ public class GuiMenu extends JFrame{
     }
 
     public int getModi(){
+        System.out.println(modusDropDown.getSelectedIndex());
         return modusDropDown.getSelectedIndex();
     }
 
