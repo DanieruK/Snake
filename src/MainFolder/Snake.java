@@ -6,12 +6,15 @@ import java.util.ArrayList;
 public class Snake extends GameObject{
 
     private Direction direction;
-    private ArrayList<Point> positionList;
+    private ArrayList<Point> positionList = new ArrayList<>();
 
     public Snake(int gridWith, int gridHeight) {
         super(gridWith, gridHeight);
-        direction = Direction.LEFT;
+        midPos();
+        direction = Direction.RIGHT;
         positionList.add(this.position);
+        positionList.add(new Point((int) position.getX(),(int)(position.getY()-1)));
+        positionList.add(new Point((int) position.getX(),(int)(position.getY()-2)));
     }
 
     public void setDirection(Direction direction) {
@@ -26,8 +29,16 @@ public class Snake extends GameObject{
         }
     }
 
+    public void addBodyPart(Point pPoint) {
+        positionList.add(pPoint);
+    }
+
     public Direction getDirection() {
         return direction;
+    }
+
+    public ArrayList<Point> getPositionList() {
+        return positionList;
     }
 
 

@@ -12,4 +12,15 @@ public abstract class GameObject {
         this.gridHeight = gridHeight;
     }
 
+    public void randPos(){
+        position = new Point((int) (Math.random()*gridWith),(int) (Math.random()*gridHeight));
+    }
+
+    public void midPos(){
+        position = new Point((int) (gridWith/2), (int) (gridHeight/2));
+    }
+
+    public Point getPosition() {
+        return position;
+    }
 }

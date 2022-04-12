@@ -66,7 +66,7 @@ public class GuiMenu extends JFrame{
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                startButtonActionPerformed(e);
+                control.startGame();
             }
         });
 
@@ -92,10 +92,5 @@ public class GuiMenu extends JFrame{
     public int getModi(){
         return modusDropDown.getSelectedIndex();
     }
-
-    private void startButtonActionPerformed(ActionEvent e){
-        control.startGame();
-    }
-
 
 }
