@@ -25,7 +25,7 @@ public class Control {
         menu = new GuiMenu(this);
     }
 
-    public void initTimer(){
+    public void initTimer() {
         switch (menu.getModi()) {
             case 0 -> {
                 delay = 300;
@@ -57,8 +57,24 @@ public class Control {
         snake = new Snake(gridWidth, gridHeight);
         placeSnake();
         calculatePosApple();
+        if (menu.getModi() == 1) {
+            for (int i = 0; i < 25; i++) {
+                calculatePosBarrier();
+            }
+        }
         gui.setSingleCellStatus((int) apple.getPosition().getX(), (int) apple.getPosition().getY(), GridPanel.Status.APPLE);
         timer.start();
+    }
+
+    public void createRandomBarrier() {
+        if (menu.getModi() == 2) calculatePosBarrier();
+    }
+
+    public void calculatePosBarrier() {
+        Point temp = new Point((int) (Math.random() * gridWidth), (int) (Math.random() * gridHeight));
+        if (gui.getSingleCellStatus((int) (temp.getX()), (int) (temp.getY())) == GridPanel.Status.EMPTY) {
+            gui.setSingleCellStatus((int) temp.getX(), (int) temp.getY(), GridPanel.Status.BARRIER);
+        } else calculatePosBarrier();
     }
 
     public void calculatePosApple() {
@@ -73,6 +89,7 @@ public class Control {
         if (apple.getPosition().getX() == snake.getPositionList().get(0).getX() && apple.getPosition().getY() == snake.getPositionList().get(0).getY()) {
             snake.addBodyPart(snake.getPositionList().get(snake.getPositionList().size() - 1));
             calculatePosApple();
+            createRandomBarrier();
             timer.stop();
             delay = (int) (delay * delayMultiplyer);
             timer.setDelay(delay);
