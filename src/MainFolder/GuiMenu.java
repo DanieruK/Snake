@@ -67,6 +67,7 @@ public class GuiMenu extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 control.startGame();
+                control.setUsername(userNameInput.getText());
             }
         });
 

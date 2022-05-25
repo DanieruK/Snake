@@ -11,6 +11,7 @@ public class GUI extends JFrame implements KeyListener{
     private Container cp;
     private JPanel gamePanel;
     private GridPanel[][] gridCell;
+    private final Font textFont = new Font("comic sans", Font.PLAIN, 18);
 
     private Control control;
 
@@ -27,6 +28,21 @@ public class GUI extends JFrame implements KeyListener{
         gamePanel.setBackground(Color.lightGray);
         gamePanel.setLayout(new GridLayout(control.getGridWidth(), control.getGridHeight()));
         cp.add(BorderLayout.CENTER, gamePanel);
+
+        JPanel timerPanel = new JPanel();
+        timerPanel.setBackground(Color.BLUE);
+        timerPanel.setLayout(new GridLayout());
+        cp.add(BorderLayout.PAGE_START,timerPanel);
+
+        JLabel timerLabel = new JLabel("Timer: ");
+        timerLabel.setForeground(Color.WHITE);
+        timerLabel.setFont(textFont);
+        timerPanel.add(timerLabel);
+
+        JLabel timeLabel = new JLabel(" XX:XX");
+        timeLabel.setFont(textFont);
+        timeLabel.setForeground(Color.WHITE);
+        timerPanel.add(timeLabel);
 
         gridCell = new GridPanel[control.getGridWidth()][control.getGridHeight()];
         for (int i = 0; i < control.getGridWidth(); i++) {
@@ -55,6 +71,7 @@ public class GUI extends JFrame implements KeyListener{
 
     public void setSingleCellStatus(int gridX, int gridY, GridPanel.Status status){
         gridCell[gridX][gridY].setStatus(status);
+        this.repaint();
     }
 
     public GridPanel.Status getSingleCellStatus(int pX, int pY){

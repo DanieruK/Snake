@@ -15,8 +15,10 @@ public class Control {
     private int delay;
     private double delayMultiplyer;
     private Timer timer;
-    private int gridWidth = 21;
-    private int gridHeight = 21;
+    private int gridWidth = 29;
+    private int gridHeight = 29;
+
+    private String username;
 
     public Control() {
     }
@@ -37,7 +39,7 @@ public class Control {
             }
             case 2 -> {
                 delay = 250;
-                delayMultiplyer = 0.95;
+                delayMultiplyer = 0.97;
             }
         }
         ActionListener taskManager = new ActionListener() {
@@ -56,25 +58,10 @@ public class Control {
         apple = new Apple(gridWidth, gridHeight);
         snake = new Snake(gridWidth, gridHeight);
         placeSnake();
+        createDiffPattern();
         calculatePosApple();
-        if (menu.getModi() == 1) {
-            for (int i = 0; i < 25; i++) {
-                calculatePosBarrier();
-            }
-        }
         gui.setSingleCellStatus((int) apple.getPosition().getX(), (int) apple.getPosition().getY(), GridPanel.Status.APPLE);
         timer.start();
-    }
-
-    public void createRandomBarrier() {
-        if (menu.getModi() == 2) calculatePosBarrier();
-    }
-
-    public void calculatePosBarrier() {
-        Point temp = new Point((int) (Math.random() * gridWidth), (int) (Math.random() * gridHeight));
-        if (gui.getSingleCellStatus((int) (temp.getX()), (int) (temp.getY())) == GridPanel.Status.EMPTY) {
-            gui.setSingleCellStatus((int) temp.getX(), (int) temp.getY(), GridPanel.Status.BARRIER);
-        } else calculatePosBarrier();
     }
 
     public void calculatePosApple() {
@@ -89,11 +76,41 @@ public class Control {
         if (apple.getPosition().getX() == snake.getPositionList().get(0).getX() && apple.getPosition().getY() == snake.getPositionList().get(0).getY()) {
             snake.addBodyPart(snake.getPositionList().get(snake.getPositionList().size() - 1));
             calculatePosApple();
-            createRandomBarrier();
             timer.stop();
             delay = (int) (delay * delayMultiplyer);
             timer.setDelay(delay);
             timer.restart();
+        }
+    }
+
+    public void createDiffPattern() {
+        if (menu.getModi() == 1) {
+            for (int i = 0; i < gui.getGridCell().length - 4; i = i + 4) {
+                for (int j = 0; j < gui.getGridCell().length - 4; j = j + 4) {
+                    gui.setSingleCellStatus(i, j, GridPanel.Status.BARRIER);
+                }
+            }
+        } else if (menu.getModi() == 2) {
+            for (int i = 3; i <= 8; i++) {
+                gui.setSingleCellStatus(3,i, GridPanel.Status.BARRIER);
+                gui.setSingleCellStatus(i,3, GridPanel.Status.BARRIER);
+                gui.setSingleCellStatus(3,i+17, GridPanel.Status.BARRIER);
+                gui.setSingleCellStatus(i,25, GridPanel.Status.BARRIER);
+                gui.setSingleCellStatus(i+17,3, GridPanel.Status.BARRIER);
+                gui.setSingleCellStatus(25,i, GridPanel.Status.BARRIER);
+                gui.setSingleCellStatus(25,i+17, GridPanel.Status.BARRIER);
+                gui.setSingleCellStatus(i+17,25, GridPanel.Status.BARRIER);
+            }
+            for (int i = 3; i <= 11 ; i++) {
+                gui.setSingleCellStatus(11,i, GridPanel.Status.BARRIER);
+                gui.setSingleCellStatus(i,11, GridPanel.Status.BARRIER);
+                gui.setSingleCellStatus(17,i, GridPanel.Status.BARRIER);
+                gui.setSingleCellStatus(i+14,11, GridPanel.Status.BARRIER);
+                gui.setSingleCellStatus(17,i+14, GridPanel.Status.BARRIER);
+                gui.setSingleCellStatus(i+14,17, GridPanel.Status.BARRIER);
+                gui.setSingleCellStatus(11,i+14, GridPanel.Status.BARRIER);
+                gui.setSingleCellStatus(i,17, GridPanel.Status.BARRIER);
+            }
         }
     }
 
@@ -155,4 +172,7 @@ public class Control {
         return snake;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }
