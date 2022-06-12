@@ -14,7 +14,7 @@ public class Control {
 
     private int delay;
     private double delayMultiplyer;
-    private Timer timer;
+    private Timer timer, counter;
     private int gridWidth = 29;
     private int gridHeight = 29;
 
@@ -48,6 +48,7 @@ public class Control {
             }
         };
         timer = new Timer(delay, taskManager);
+        counter =  new Timer(1000, e -> gui.updateTimeLabel());
     }
 
     public void startGame() {
@@ -62,6 +63,7 @@ public class Control {
         calculatePosApple();
         gui.setSingleCellStatus((int) apple.getPosition().getX(), (int) apple.getPosition().getY(), GridPanel.Status.APPLE);
         timer.start();
+        counter.start();
     }
 
     public void calculatePosApple() {
@@ -76,6 +78,7 @@ public class Control {
         if (apple.getPosition().getX() == snake.getPositionList().get(0).getX() && apple.getPosition().getY() == snake.getPositionList().get(0).getY()) {
             snake.addBodyPart(snake.getPositionList().get(snake.getPositionList().size() - 1));
             calculatePosApple();
+            gui.incPunkte();
             timer.stop();
             delay = (int) (delay * delayMultiplyer);
             timer.setDelay(delay);
@@ -131,9 +134,15 @@ public class Control {
 
     public void collision() {
         timer.stop();
+        counter.stop();
         for (int i = 0; i < snake.getPositionList().size() - 1; i++) {
             gui.setSingleCellStatus((int) snake.getPositionList().get(i).getX(), (int) snake.getPositionList().get(i).getY(), GridPanel.Status.SNAKEDEAD);
         }
+    }
+
+    public void createInfo(){
+        System.out.println("Gespielte Zeit: " + gui.getActiveTimeMin() + ":" + gui.getActiveTimeSec());
+        System.out.println("Erziehlte Punkte: ");
     }
 
     public void move() {
@@ -162,10 +171,6 @@ public class Control {
 
     public int getGridWidth() {
         return gridWidth;
-    }
-
-    public Apple getApple() {
-        return apple;
     }
 
     public Snake getSnake() {
