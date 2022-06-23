@@ -11,6 +11,7 @@ public class Control {
     private Snake snake;
     private Apple apple;
     private GUI gui;
+    private DataBase db;
 
     private int delay;
     private double delayMultiplyer;
@@ -21,6 +22,7 @@ public class Control {
     private String username;
 
     public Control() {
+        db = new DataBase();
     }
 
     public void start() {
@@ -53,7 +55,6 @@ public class Control {
 
     public void startGame() {
         initTimer();
-        System.out.println(delay + " " + delayMultiplyer);
         menu.closeGUI();
         gui = new GUI(this);
         apple = new Apple(gridWidth, gridHeight);
@@ -64,6 +65,7 @@ public class Control {
         gui.setSingleCellStatus((int) apple.getPosition().getX(), (int) apple.getPosition().getY(), GridPanel.Status.APPLE);
         timer.start();
         counter.start();
+        db.savePlayer(menu.getUserNameInput().getText());
     }
 
     public void calculatePosApple() {
@@ -138,6 +140,7 @@ public class Control {
         for (int i = 0; i < snake.getPositionList().size() - 1; i++) {
             gui.setSingleCellStatus((int) snake.getPositionList().get(i).getX(), (int) snake.getPositionList().get(i).getY(), GridPanel.Status.SNAKEDEAD);
         }
+        db.saveSpiel(menu.getUserNameInput().getText(),gui.getPunkte(), menu.getModi()+1, gui.getTime());
     }
 
     public void createInfo(){

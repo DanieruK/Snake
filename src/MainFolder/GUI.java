@@ -120,6 +120,14 @@ public class GUI extends JFrame implements KeyListener {
         return activeTimeSec;
     }
 
+    public int getPunkte() {
+        return punkte;
+    }
+
+    public int getTime(){
+        return activeTimeMin*60 + activeTimeSec;
+    }
+
     public void updateTimeLabel() {
         if (activeTimeSec < 9) {
             activeTimeSec++;

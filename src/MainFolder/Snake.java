@@ -41,8 +41,6 @@ public class Snake extends GameObject{
         return positionList;
     }
 
-
-
     enum Direction{
         UP, DOWN, LEFT, RIGHT
     }

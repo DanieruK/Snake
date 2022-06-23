@@ -67,7 +67,6 @@ public class GuiMenu extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 control.startGame();
-                control.setUsername(userNameInput.getText());
             }
         });
 
@@ -94,4 +93,7 @@ public class GuiMenu extends JFrame{
         return modusDropDown.getSelectedIndex();
     }
 
+    public JTextField getUserNameInput() {
+        return userNameInput;
+    }
 }
