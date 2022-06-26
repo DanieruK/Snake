@@ -78,7 +78,7 @@ public class GuiMenu extends JFrame{
         dbButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Keine Datenbank vorhanden");
+                control.openDatenbank();
             }
         });
 

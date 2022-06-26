@@ -24,7 +24,7 @@ public class GUI extends JFrame implements KeyListener {
         height = (int) ((int) size.getHeight() - size.getHeight() / 5);
         cp = this.getContentPane();
         cp.setLayout(new BorderLayout());
-        cp.setBackground(Color.black);
+        cp.setBackground(Color.lightGray);
 
         gamePanel = new JPanel();
         gamePanel.setBackground(Color.lightGray);
@@ -140,6 +140,31 @@ public class GUI extends JFrame implements KeyListener {
             activeTimeMin++;
             timeLabel.setText(activeTimeMin + ":" + activeTimeSec);
         }
+    }
+
+    public void gameOverScreen(){
+        gamePanel.setVisible(false);
+
+        JPanel gameOverPanel = new JPanel();
+        gameOverPanel.setBackground(Color.lightGray);
+        gameOverPanel.setLayout(null);
+        cp.add(gameOverPanel);
+
+        JPanel grayBox = new JPanel();
+        grayBox.setBackground(Color.darkGray);
+        grayBox.setBounds(0,gamePanel.getHeight()/3,gamePanel.getWidth(),gamePanel.getHeight()/4);
+        grayBox.setLayout(null);
+        gameOverPanel.add(grayBox);
+
+        JPanel gameOverTextBox = new JPanel();
+        gameOverTextBox.setBackground(Color.darkGray);
+        gameOverTextBox.setBounds(grayBox.getWidth()/4,grayBox.getHeight()/3,grayBox.getWidth()/2, grayBox.getHeight()/2);
+        grayBox.add(gameOverTextBox);
+
+        JLabel gameOverText = new JLabel("GAME OVER");
+        gameOverText.setFont(new Font("Times new Roman", Font.PLAIN, this.getHeight() / 12));
+        gameOverText.setForeground(Color.red.darker());
+        gameOverTextBox.add(gameOverText);
     }
 
     public void keyReleased(KeyEvent e) {

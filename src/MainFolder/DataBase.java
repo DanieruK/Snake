@@ -1,5 +1,7 @@
 package MainFolder;
 
+import org.sqlite.SQLiteConfig;
+
 import java.sql.*;
 
 public class DataBase {
@@ -31,12 +33,14 @@ public class DataBase {
                 "PUNKTE INT," +
                 "FOREIGN KEY (SPIELERID)" +
                 "REFERENCES SPIELER (SPIELERID)" +
-                "FOREIGN KEY (SPIELERID)" +
+                "FOREIGN KEY (SCHWIERIGKEITID)" +
                 "REFERENCES SCHWIERIGKEIT (SCHWIERIGKEITID));";
 
         try {
             Class.forName("org.sqlite.JDBC");
-            con = DriverManager.getConnection("jdbc:sqlite:Snake.db");
+            SQLiteConfig config = new SQLiteConfig();
+            config.enforceForeignKeys(true);
+            con = DriverManager.getConnection("jdbc:sqlite:snake.db",config.toProperties());
             Statement stmt = con.createStatement();
             stmt.executeUpdate(sql);
             try (ResultSet rs = stmt.executeQuery(query)) {

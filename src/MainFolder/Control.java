@@ -12,6 +12,7 @@ public class Control {
     private Apple apple;
     private GUI gui;
     private DataBase db;
+    private DBZugang dbGUI;
 
     private int delay;
     private double delayMultiplyer;
@@ -141,6 +142,7 @@ public class Control {
             gui.setSingleCellStatus((int) snake.getPositionList().get(i).getX(), (int) snake.getPositionList().get(i).getY(), GridPanel.Status.SNAKEDEAD);
         }
         db.saveSpiel(menu.getUserNameInput().getText(),gui.getPunkte(), menu.getModi()+1, gui.getTime());
+        gui.gameOverScreen();
     }
 
     public void createInfo(){
@@ -166,6 +168,11 @@ public class Control {
         gui.setSingleCellStatus((int) snake.getPositionList().get(snake.getPositionList().size() - 1).getX(), (int) snake.getPositionList().get(snake.getPositionList().size() - 1).getY(), GridPanel.Status.EMPTY);
         snake.getPositionList().remove(snake.getPositionList().size() - 1);
         eatApple();
+    }
+
+    public void openDatenbank(){
+        menu.closeGUI();
+        dbGUI = new DBZugang(this);
     }
 
     public int getGridHeight() {
