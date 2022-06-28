@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class Control {
 
@@ -168,6 +170,10 @@ public class Control {
         gui.setSingleCellStatus((int) snake.getPositionList().get(snake.getPositionList().size() - 1).getX(), (int) snake.getPositionList().get(snake.getPositionList().size() - 1).getY(), GridPanel.Status.EMPTY);
         snake.getPositionList().remove(snake.getPositionList().size() - 1);
         eatApple();
+    }
+
+    public ArrayList getArrayList(String pName, String pSch){
+        return db.getbestenliste(pName,pSch);
     }
 
     public void openDatenbank(){

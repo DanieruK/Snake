@@ -3,6 +3,7 @@ package MainFolder;
 import org.sqlite.SQLiteConfig;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class DataBase {
 
@@ -40,7 +41,7 @@ public class DataBase {
             Class.forName("org.sqlite.JDBC");
             SQLiteConfig config = new SQLiteConfig();
             config.enforceForeignKeys(true);
-            con = DriverManager.getConnection("jdbc:sqlite:snake.db",config.toProperties());
+            con = DriverManager.getConnection("jdbc:sqlite:snake.db", config.toProperties());
             Statement stmt = con.createStatement();
             stmt.executeUpdate(sql);
             try (ResultSet rs = stmt.executeQuery(query)) {
@@ -91,7 +92,7 @@ public class DataBase {
                 spielerID = rs.getInt(1);
             }
             String sqlInsert = "INSERT INTO SPIEL(SPIELERID,SCHWIERIGKEITID,ZEIT,PUNKTE)" +
-                    "VALUES (" + spielerID + "," + schwierigkeit+ "," + zeit + "," + punkte + ");";
+                    "VALUES (" + spielerID + "," + schwierigkeit + "," + zeit + "," + punkte + ");";
             stmt.executeUpdate(sqlInsert);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -106,6 +107,57 @@ public class DataBase {
             stmt.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+    }
+
+    public ArrayList getbestenliste(String pName, String pSchwierigkeit) {
+        try {
+            PreparedStatement pstmt = null;
+            ResultSet rs = null;
+            if (pName.equals("") && pSchwierigkeit.equals("")) {
+                pstmt = con.prepareStatement("SELECT SPIELERNAME, SCHWIERIGKEIT, ZEIT, PUNKTE " +
+                        "FROM SPIELER SPI, SCHWIERIGKEIT SCH, SPIEL SP " +
+                        "WHERE SPI.SPIELERID = SP.SPIELERID " +
+                        "AND SP.SCHWIERIGKEITID = SCH.SCHWIERIGKEITID " +
+                        "ORDER BY PUNKTE DESC, ZEIT ASC");
+                rs = pstmt.executeQuery();
+            } else if (pName.equals("")) {
+                pstmt = con.prepareStatement("SELECT SPIELERNAME, SCHWIERIGKEIT, ZEIT, PUNKTE " +
+                        "FROM SPIELER SPI, SCHWIERIGKEIT SCH, SPIEL SP " +
+                        "WHERE SPI.SPIELERID = SP.SPIELERID " +
+                        "and SP.SCHWIERIGKEITID = SCH.SCHWIERIGKEITID " +
+                        "and SCHWIERIGKEIT = ? " +
+                        "ORDER BY PUNKTE DESC, ZEIT ASC");
+                pstmt.setString(1, pSchwierigkeit);
+                rs = pstmt.executeQuery();
+            } else if (pSchwierigkeit.equals("")) {
+                pstmt = con.prepareStatement("SELECT SPIELERNAME, SCHWIERIGKEIT, ZEIT, PUNKTE " +
+                        "FROM SPIELER SPI, SCHWIERIGKEIT SCH, SPIEL SP " +
+                        "WHERE SPI.SPIELERID = SP.SPIELERID " +
+                        "and SP.SCHWIERIGKEITID = SCH.SCHWIERIGKEITID " +
+                        "and SPIELERNAME = ? " +
+                        "ORDER BY PUNKTE DESC, ZEIT ASC");
+                pstmt.setString(1, pName);
+                rs = pstmt.executeQuery();
+            } else {
+                pstmt = con.prepareStatement("SELECT SPIELERNAME, SCHWIERIGKEIT, ZEIT, PUNKTE " +
+                        "FROM SPIELER SPI, SCHWIERIGKEIT SCH, SPIEL SP " +
+                        "WHERE SPI.SPIELERID = SP.SPIELERID " +
+                        "and SP.SCHWIERIGKEITID = SCH.SCHWIERIGKEITID " +
+                        "and SPIELERNAME = ? " +
+                        "and SCHWIERIGKEIT = ? " +
+                        "ORDER BY PUNKTE DESC, ZEIT ASC");
+                pstmt.setString(1, pName);
+                pstmt.setString(2, pSchwierigkeit);
+                rs = pstmt.executeQuery();
+            }
+            ArrayList<String[]> data = new ArrayList<>();
+            while (rs.next()){
+                data.add(new String[]{rs.getString("SPIELERNAME"),rs.getString("SCHWIERIGKEIT"),rs.getString("ZEIT"),rs.getString("PUNKTE")});
+            }
+            return data;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
