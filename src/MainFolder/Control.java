@@ -145,6 +145,7 @@ public class Control {
         }
         db.saveSpiel(menu.getUserNameInput().getText(),gui.getPunkte(), menu.getModi()+1, gui.getTime());
         gui.gameOverScreen();
+        db.closeCon();
     }
 
     public void createInfo(){
@@ -170,6 +171,10 @@ public class Control {
         gui.setSingleCellStatus((int) snake.getPositionList().get(snake.getPositionList().size() - 1).getX(), (int) snake.getPositionList().get(snake.getPositionList().size() - 1).getY(), GridPanel.Status.EMPTY);
         snake.getPositionList().remove(snake.getPositionList().size() - 1);
         eatApple();
+    }
+
+    public void closeDBcon(){
+        db.closeCon();
     }
 
     public ArrayList getArrayList(String pName, String pSch){

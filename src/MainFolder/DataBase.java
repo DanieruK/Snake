@@ -11,7 +11,7 @@ public class DataBase {
 
     public DataBase() {
 
-        String sql = "CREATE TABLE IF NOT EXISTS SCHWIERIGKEIT ( " +
+        String table1 = "CREATE TABLE IF NOT EXISTS SCHWIERIGKEIT ( " +
                 "SCHWIERIGKEITID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "SCHWIERIGKEIT TEXT);";
 
@@ -22,11 +22,11 @@ public class DataBase {
 
         String query = "SELECT COUNT(*) FROM SCHWIERIGKEIT WHERE SCHWIERIGKEIT LIKE 'Leicht'";
 
-        String sql2 = "CREATE TABLE IF NOT EXISTS SPIELER ( " +
+        String table2 = "CREATE TABLE IF NOT EXISTS SPIELER ( " +
                 "SPIELERID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                 "SPIELERNAME TEXT);";
 
-        String sql3 = "CREATE TABLE IF NOT EXISTS SPIEL (" +
+        String table3 = "CREATE TABLE IF NOT EXISTS SPIEL (" +
                 "SPIELID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "SPIELERID INT," +
                 "SCHWIERIGKEITID INT," +
@@ -43,7 +43,7 @@ public class DataBase {
             config.enforceForeignKeys(true);
             con = DriverManager.getConnection("jdbc:sqlite:snake.db", config.toProperties());
             Statement stmt = con.createStatement();
-            stmt.executeUpdate(sql);
+            stmt.executeUpdate(table1);
             try (ResultSet rs = stmt.executeQuery(query)) {
                 if (rs.next()) {
                     boolean found = rs.getBoolean(1);
@@ -52,8 +52,8 @@ public class DataBase {
                     }
                 }
             }
-            stmt.executeUpdate(sql2);
-            stmt.executeUpdate(sql3);
+            stmt.executeUpdate(table2);
+            stmt.executeUpdate(table3);
             stmt.close();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
