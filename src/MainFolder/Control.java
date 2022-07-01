@@ -21,8 +21,8 @@ public class Control {
     private Timer timer, counter;
     private int gridWidth = 29;
     private int gridHeight = 29;
-
     private String username;
+    private boolean timerstarted = false;
 
     public Control() {
         db = new DataBase();
@@ -66,9 +66,26 @@ public class Control {
         createDiffPattern();
         calculatePosApple();
         gui.setSingleCellStatus((int) apple.getPosition().getX(), (int) apple.getPosition().getY(), GridPanel.Status.APPLE);
-        timer.start();
-        counter.start();
+        startTimer();
         db.savePlayer(menu.getUserNameInput().getText());
+    }
+
+    public void startTimer(){
+        Thread waitForTimer = new Thread(() -> {
+            if (gui.getGameStart() && !timerstarted) {
+                timer.start();
+                counter.start();
+                timerstarted = true;
+            }else{
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                startTimer();
+            }
+        });
+        waitForTimer.start();
     }
 
     public void calculatePosApple() {
@@ -146,11 +163,6 @@ public class Control {
         db.saveSpiel(menu.getUserNameInput().getText(),gui.getPunkte(), menu.getModi()+1, gui.getTime());
         gui.gameOverScreen();
         db.closeCon();
-    }
-
-    public void createInfo(){
-        System.out.println("Gespielte Zeit: " + gui.getActiveTimeMin() + ":" + gui.getActiveTimeSec());
-        System.out.println("Erziehlte Punkte: ");
     }
 
     public void move() {

@@ -124,8 +124,6 @@ public class GuiMenu extends JFrame{
 
         setVisible(true);
     }
-
-
     public void closeGUI(){
         dispose();
     }

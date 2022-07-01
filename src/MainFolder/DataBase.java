@@ -94,6 +94,7 @@ public class DataBase {
             String sqlInsert = "INSERT INTO SPIEL(SPIELERID,SCHWIERIGKEITID,ZEIT,PUNKTE)" +
                     "VALUES (" + spielerID + "," + schwierigkeit + "," + zeit + "," + punkte + ");";
             stmt.executeUpdate(sqlInsert);
+            stmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -155,6 +156,7 @@ public class DataBase {
             while (rs.next()){
                 data.add(new String[]{rs.getString("SPIELERNAME"),rs.getString("SCHWIERIGKEIT"),rs.getString("ZEIT"),rs.getString("PUNKTE")});
             }
+            pstmt.close();
             return data;
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -15,6 +15,7 @@ public class GUI extends JFrame implements KeyListener {
     private GridPanel[][] gridCell;
     private JLabel timeLabel, punkteLabel;
     private int activeTimeSec = 0, activeTimeMin = 0, punkte = 0;
+    private boolean gameStart =false;
     private final Font textFont = new Font("comic sans", Font.PLAIN, 18);
 
     private Control control;
@@ -137,12 +138,16 @@ public class GUI extends JFrame implements KeyListener {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_W) {
             control.getSnake().setDirection(Snake.Direction.UP);
+            gameStart = true;
         } else if (e.getKeyCode() == KeyEvent.VK_S) {
             control.getSnake().setDirection(Snake.Direction.DOWN);
+            gameStart = true;
         } else if (e.getKeyCode() == KeyEvent.VK_A) {
             control.getSnake().setDirection(Snake.Direction.LEFT);
+            gameStart = true;
         } else if (e.getKeyCode() == KeyEvent.VK_D) {
             control.getSnake().setDirection(Snake.Direction.RIGHT);
+            gameStart = true;
         }
     }
 
@@ -204,6 +209,10 @@ public class GUI extends JFrame implements KeyListener {
         gameOverText.setFont(new Font("Times new Roman", Font.PLAIN, this.getHeight() / 12));
         gameOverText.setForeground(Color.red.darker());
         gameOverTextBox.add(gameOverText);
+    }
+
+    public boolean getGameStart(){
+        return gameStart;
     }
 
     public void keyReleased(KeyEvent e) {
