@@ -23,6 +23,8 @@ public class Control {
     private int gridHeight = 29;
     private String username;
     private boolean timerstarted = false;
+    private int[][] map = new int[29][29];
+    private int easyMap = 1, mediumMap = 2, hardMap = 3;
 
     public Control() {
         db = new DataBase();
@@ -53,7 +55,7 @@ public class Control {
             }
         };
         timer = new Timer(delay, taskManager);
-        counter =  new Timer(1000, e -> gui.updateTimeLabel());
+        counter = new Timer(1000, e -> gui.updateTimeLabel());
     }
 
     public void startGame() {
@@ -62,21 +64,21 @@ public class Control {
         gui = new GUI(this);
         apple = new Apple(gridWidth, gridHeight);
         snake = new Snake(gridWidth, gridHeight);
+        createDiffPattern(getMap());
         placeSnake();
-        createDiffPattern();
         calculatePosApple();
         gui.setSingleCellStatus((int) apple.getPosition().getX(), (int) apple.getPosition().getY(), GridPanel.Status.APPLE);
         startTimer();
         db.savePlayer(menu.getUserNameInput().getText());
     }
 
-    public void startTimer(){
+    public void startTimer() {
         Thread waitForTimer = new Thread(() -> {
             if (gui.getGameStart() && !timerstarted) {
                 timer.start();
                 counter.start();
                 timerstarted = true;
-            }else{
+            } else {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -86,6 +88,12 @@ public class Control {
             }
         });
         waitForTimer.start();
+    }
+
+    public int getMap(){
+        if (menu.getModi() == 0) return easyMap;
+        else if (menu.getModi() == 1) return mediumMap;
+        else return hardMap;
     }
 
     public void calculatePosApple() {
@@ -108,33 +116,12 @@ public class Control {
         }
     }
 
-    public void createDiffPattern() {
-        if (menu.getModi() == 1) {
-            for (int i = 0; i < gui.getGridCell().length - 4; i = i + 4) {
-                for (int j = 0; j < gui.getGridCell().length - 4; j = j + 4) {
-                    gui.setSingleCellStatus(i, j, GridPanel.Status.BARRIER);
-                }
-            }
-        } else if (menu.getModi() == 2) {
-            for (int i = 3; i <= 8; i++) {
-                gui.setSingleCellStatus(3,i, GridPanel.Status.BARRIER);
-                gui.setSingleCellStatus(i,3, GridPanel.Status.BARRIER);
-                gui.setSingleCellStatus(3,i+17, GridPanel.Status.BARRIER);
-                gui.setSingleCellStatus(i,25, GridPanel.Status.BARRIER);
-                gui.setSingleCellStatus(i+17,3, GridPanel.Status.BARRIER);
-                gui.setSingleCellStatus(25,i, GridPanel.Status.BARRIER);
-                gui.setSingleCellStatus(25,i+17, GridPanel.Status.BARRIER);
-                gui.setSingleCellStatus(i+17,25, GridPanel.Status.BARRIER);
-            }
-            for (int i = 3; i <= 11 ; i++) {
-                gui.setSingleCellStatus(11,i, GridPanel.Status.BARRIER);
-                gui.setSingleCellStatus(i,11, GridPanel.Status.BARRIER);
-                gui.setSingleCellStatus(17,i, GridPanel.Status.BARRIER);
-                gui.setSingleCellStatus(i+14,11, GridPanel.Status.BARRIER);
-                gui.setSingleCellStatus(17,i+14, GridPanel.Status.BARRIER);
-                gui.setSingleCellStatus(i+14,17, GridPanel.Status.BARRIER);
-                gui.setSingleCellStatus(11,i+14, GridPanel.Status.BARRIER);
-                gui.setSingleCellStatus(i,17, GridPanel.Status.BARRIER);
+    public void createDiffPattern(int mapID) {
+        int[][] map = Serializer.deserialize(db.searchForMap(mapID));
+        for (int i = 0; i < gui.getGridCell().length; i++) {
+            for (int j = 0; j < gui.getGridCell().length; j++) {
+                if (map[i][j] == 1) gui.setSingleCellStatus(i, j, GridPanel.Status.BARRIER);
+                else gui.setSingleCellStatus(i, j, GridPanel.Status.EMPTY);
             }
         }
     }
@@ -160,7 +147,7 @@ public class Control {
         for (int i = 0; i < snake.getPositionList().size() - 1; i++) {
             gui.setSingleCellStatus((int) snake.getPositionList().get(i).getX(), (int) snake.getPositionList().get(i).getY(), GridPanel.Status.SNAKEDEAD);
         }
-        db.saveSpiel(menu.getUserNameInput().getText(),gui.getPunkte(), menu.getModi()+1, gui.getTime());
+        db.saveSpiel(menu.getUserNameInput().getText(), gui.getPunkte(), menu.getModi() + 1, gui.getTime(), getMap());
         gui.gameOverScreen();
         db.closeCon();
     }
@@ -185,15 +172,15 @@ public class Control {
         eatApple();
     }
 
-    public void closeDBcon(){
+    public void closeDBcon() {
         db.closeCon();
     }
 
-    public ArrayList getArrayList(String pName, String pSch){
-        return db.getbestenliste(pName,pSch);
+    public ArrayList getArrayList(String pName, String pSch) {
+        return db.getbestenliste(pName, pSch);
     }
 
-    public void openDatenbank(){
+    public void openDatenbank() {
         menu.closeGUI();
         dbGUI = new DBZugang(this);
     }

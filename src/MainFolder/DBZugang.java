@@ -183,8 +183,8 @@ public class DBZugang extends JFrame {
         } else schwName = "";
 
         ArrayList<String[]> al = control.getArrayList(searchName, schwName);
-        String data[][] = new String[al.size()][4];
-        String column[] = {"Spielername", "Schwierigkeit", "Zeit", "Punkte"};
+        String data[][] = new String[al.size()][5];
+        String column[] = {"Spielername", "Schwierigkeit", "Spielefeld", "Zeit", "Punkte"};
 
         for (int i = 0; i < data.length; i++) {
             data[i] = al.get(i);
@@ -197,7 +197,11 @@ public class DBZugang extends JFrame {
         tablePanel.setLayout(new GridLayout(1, 1));
         con.add(tablePanel);
 
-        JTable table = new JTable(data, column);
+        JTable table = new JTable(data, column) {
+            public boolean editCellAt(int row, int column, java.util.EventObject e) {
+                return false;
+            }
+        };
 
         JScrollPane scrollPane = new JScrollPane(table,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
